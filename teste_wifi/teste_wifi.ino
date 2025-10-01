@@ -21,6 +21,10 @@ void loop() {
 
 }
 
+void(){
+  
+}
+
 void scanLocalNetworks(){
   Serial.println("Iniciando Scan de Redes Wi-Fi");
   int number = WiFi.scanNetworks();
