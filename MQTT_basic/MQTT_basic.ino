@@ -1,8 +1,8 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 
-const String SSID = "Iphone do pavarin";
-const String PSWD = "pavarini";
+const String SSID = "Iphone";
+const String PSWD = "iot_sul_123";
 
 const char* brokerUrl = "test.mosquitto.org";
 const int port = 1883;
@@ -16,7 +16,7 @@ void connectToMqtt();
 void setup() {
   Serial.begin(115200);
   connectToWifi();
-  connectToMqtt();   // agora é função
+  connectToMqtt(); 
 }
 
 void loop() {
@@ -29,23 +29,12 @@ void loop() {
     Serial.println("MQTT desconectado! Tentando reconectar...");
     connectToMqtt();
   }
+  mqttClient.publish("AulaIoTSul/Chat","Flavin do pneu");
+  delay(1000);
 
-  mqttClient.loop(); // mantém a conexão viva
+  mqttClient.loop(); 
 }
 
-void connectToWifi() {
-  Serial.println("Iniciando conexão com rede WiFi...");
-  WiFi.begin(SSID.c_str(), PSWD.c_str());
-
-  while (WiFi.status() != WL_CONNECTED) {
-    Serial.print(".");
-    delay(500);
-  }
-
-  Serial.println("\nConectado ao WiFi!");
-  Serial.print("IP: ");
-  Serial.println(WiFi.localIP());
-}
 
 void connectToMqtt() {
   Serial.println("Conectando ao broker MQTT...");
@@ -58,12 +47,24 @@ void connectToMqtt() {
     if (mqttClient.connect(clientId.c_str())) {
       Serial.println("Conectado ao broker com sucesso!");
     } else {
-      Serial.print("Falha na conexão MQTT, rc=");
-      Serial.print(mqttClient.state());
+      Serial.println("Falha na conexão MQTT, rc=");
+      Serial.println(mqttClient.state());
       Serial.println(" tentando novamente em 5s...");
       delay(5000);
     }
   }
+}
+
+void connectToWifi() {
+  Serial.println("Iniciando conexão com rede WiFi...");
+  WiFi.begin(SSID.c_str(), PSWD.c_str());
+
+  while (WiFi.status() != WL_CONNECTED) {
+    Serial.print(".");
+    delay(500);
+  }
+
+  Serial.println("\nConectado ao WiFi!");
 }
 
 void scanLocalNetworks() {
